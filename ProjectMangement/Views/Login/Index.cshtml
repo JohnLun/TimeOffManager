@@ -1,0 +1,30 @@
+﻿@{
+    Layout = null;
+}
+<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+<link rel="stylesheet" href="~/ProjectMangement.styles.css" asp-append-version="true" />
+
+<div class="container d-flex justify-content-center align-items-center vh-100">
+    <div class="col-md-4">
+        <div class="card login-card shadow-lg">
+            <div class="card-body p-4">
+                <h3 class="text-center mb-4 login-title">JMFamily Login</h3>
+                <form asp-action="Login" method="post">
+                    <div class="form-group mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" name="Email" placeholder="Enter email" required />
+                    </div>
+                    <div class="form-group mb-4">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="password" name="Password" placeholder="Enter password" required />
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100 login-button">Login</button>
+                </form>
+                <div class="text-center mt-3">
+                    <a asp-action="CreateAccount" class="btn btn-link">Create an Account</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
