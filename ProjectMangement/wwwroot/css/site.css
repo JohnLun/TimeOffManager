@@ -8,6 +8,10 @@ html {
     background-color: #f9f9f9; /* Light background for table */
 }
 
+.timeoffbalancehead {
+    background-color: #008c96;
+}
+
 .jmfamily-thead {
     background-color: #008c96; /* JM Family primary blue */
     color: white; /* White text on blue header */

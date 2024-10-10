@@ -9,7 +9,7 @@
 
 <div class="container">
     <div class="card mb-4">
-        <div class="card-header text-white bg-teal">
+        <div class="card-header text-white timeoffbalancehead">
             <strong>Time Off Balances</strong>
         </div>
         <div class="card-body p-0">
@@ -17,15 +17,15 @@
                 <tbody>
                     <tr>
                         <td>Annual Paid Time Off Available</td>
-                        <td>66.67 Hours</td>
+                        <td>@Model.PTOHours Hours</td>
                     </tr>
                     <tr>
                         <td>Community Impact</td>
-                        <td>16.00 Hours</td>
+                        <td>@Model.CIHours Hours</td>
                     </tr>
                     <tr>
                         <td>Floating Holiday</td>
-                        <td>8.00 Hours</td>
+                        <td>@Model.FHHours Hours</td>
                     </tr>
                 </tbody>
             </table>
@@ -35,7 +35,7 @@
 <div class="container">
     <div class="row">
         <div class="col">
-                <a href="@Url.Action("Report", "Home", new { requestId = -1 })" class="btn btn-primary jmfamily-btn">
+                <a href="@Url.Action("Report", "Home", new { requestId = 0, UserId = Model.UserId })" class="btn btn-primary jmfamily-btn">
                     New Report
                 </a>
         </div>

@@ -1,22 +1,120 @@
 ﻿@model TimeOffManager.Models.Request
 
-<div class="container mt-5">
-    <div class="row">
-        <div class="col-md-6">
-            <input type="text" class="form-control custom-input" placeholder="@Model.StartDate">
+<h2>@(Model.RequestId == 0 ? "Create New Request" : "Edit Request")</h2>
+<form asp-action="Report" method="post">
+    <div class="container mt-5">
+        <div class="row">
+            <!-- Hidden fields for UserId and Status -->
+            <div class="col-md-0">
+                <input type="hidden" asp-for="UserId" />
+            </div>
+            <div class="col-md-0">
+                <input type="hidden" asp-for="Status" />
+            </div>
+
+            <!-- Start Date -->
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label asp-for="StartDate" class="form-label" style="color: #008c96;">Start Date</label>
+                    <div class="input-group">
+                        <input type="date" class="form-control custom-input" name="StartDate" asp-for="StartDate" />
+                        <div class="input-group-append">
+                            <span class="input-group-text">
+                                <i class="fa fa-calendar"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- End Date -->
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label asp-for="EndDate" class="form-label" style="color: #008c96;">End Date</label>
+                    <div class="input-group">
+                        <input type="date" class="form-control custom-input" name="EndDate" asp-for="EndDate" />
+                        <div class="input-group-append">
+                            <span class="input-group-text">
+                                <i class="fa fa-calendar"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Request Type -->
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label asp-for="RequestType" class="form-label" style="color: #008c96;">Request Type</label>
+                    <div class="input-group">
+                        <select class="form-control custom-input" asp-for="RequestType">
+                            <option value="" disabled selected=@(Model.RequestType == null ? "selected" : "")>Select Type</option>
+                            <option value="PTO" selected=@(Model.RequestType == "PTO" ? "selected" : "") name="PTO">Paid Time Off</option>
+                            <option value="CI" selected=@(Model.RequestType == "CI" ? "selected" : "") name="CI">Community Impact</option>
+                            <option value="FH" selected=@(Model.RequestType == "FH" ? "selected" : "") name="FH">Floating Holiday</option>
+                        </select>
+                        <div class="input-group-append">
+                            <span class="input-group-text">
+                                <i class="fa fa-caret-down"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="col-md-6">
-            <input type="text" class="form-control custom-input" placeholder="@Model.EndDate">
+
+        <!-- Reason -->
+        <div class="row mt-3">
+            <div class="col-12">
+                <label asp-for="Reason" class="form-label" style="color: #008c96;">Reason</label>
+                <textarea class="form-control custom-textarea" asp-for="Reason" rows="5" placeholder="Reason" name="Reason"></textarea>
+            </div>
+        </div>
+
+        <!-- Buttons: Submit, Cancel, Trash (if RequestId != 0) -->
+        <div class="row mt-3">
+            <div class="col-12 text-right">
+                @if (Model.RequestId == 0)
+                {
+                    <button type="submit" class="btn btn-primary" style="background-color: #008c96; border-color: #008c96;">Submit Request</button>
+                }
+                else
+                {
+                    <button type="submit" class="btn btn-primary" style="background-color: #008c96; border-color: #008c96;">Save Changes</button>
+                }
+
+                <!-- Cancel Button -->
+                <a href="@Url.Action("Index", "Home", new { userId = Model.UserId })" class="btn btn-secondary ml-2">Cancel</a>
+
+                <!-- Trash Button (only if RequestId != 0) -->
+                @if (Model.RequestId != 0)
+                {
+                    <button type="button" class="btn btn-danger ml-2" onclick="deleteRequest(@Model.RequestId, @Model.UserId)">
+                        <i class="fa fa-trash"></i> Delete
+                    </button>
+                }
+            </div>
         </div>
     </div>
-    <div class="row mt-3">
-        <div class="col-12">
-            <textarea class="form-control custom-textarea" rows="5" placeholder="@Model.Reason"></textarea>
-        </div>
-    </div>
-    <div class="row mt-3">
-        <div class="col-12 text-right">
-            <button type="button" class="btn btn-primary" style="background-color: #008c96; border-color: #008c96;">Submit Changes</button>
-        </div>
-    </div>
-</div>
+</form>
+
+<script>
+    function deleteRequest(requestId, userId) {
+        if (confirm("Are you sure you want to delete this request?")) {
+            fetch(`/home/delete?RequestId=${requestId}&UserId=${userId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(response => {
+                    if (response.ok) {
+                        window.location.href = `/Home/Index?userId=${userId}`;
+                    } else {
+                        alert("Failed to delete the request.");
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        }
+    }
+</script>
