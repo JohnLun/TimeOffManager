@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TimeOffManager.Data;
@@ -11,9 +12,11 @@ using TimeOffManager.Data;
 namespace TimeOffManager.Migrations
 {
     [DbContext(typeof(URDbContext))]
-    partial class URDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241010141850_changedRequestTypeToString")]
+    partial class changedRequestTypeToString
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

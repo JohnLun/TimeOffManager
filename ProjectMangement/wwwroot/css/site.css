@@ -1,6 +1,71 @@
+@import url('site.css');
 html {
   font-size: 14px;
 }
+
+.request-table {
+    width: 100%;
+    background-color: #f9f9f9; /* Light background for table */
+}
+
+.jmfamily-thead {
+    background-color: #008c96; /* JM Family primary blue */
+    color: white; /* White text on blue header */
+}
+
+.table-bordered {
+    border: 2px solid #008c96; /* Blue border for the table */
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: #f0f8f9; /* Lighter JM Family blue for alternate row background */
+}
+
+.table-striped tbody tr:hover {
+    background-color: #d1e7ea; /* Slightly darker hover effect */
+}
+
+th, td {
+    padding: 15px;
+    text-align: center;
+}
+
+input#filterInput {
+    border: 2px solid #008c96; /* Blue border for the filter input */
+    padding: 10px;
+}
+
+    input#filterInput::placeholder {
+        color: #008c96; /* JM Family blue for placeholder text */
+    }
+
+.request-card {
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    padding: 10px;
+    width: 100%;
+}
+
+
+.card-body {
+    padding: 20px;
+    background-color: #f0f8f9; /* Light JMFamily background color */
+}
+
+.card-text, .card-title {
+    margin-right: 20px; /* Add space between elements */
+}
+.card-text strong {
+    color: #333; /* Darker color for labels */
+}
+
+@media (max-width: 768px) {
+    .col-md-4 {
+        flex: 1 1 100%;
+    }
+}
+
 /* Login page container */
 .login-container {
     height: 100vh;

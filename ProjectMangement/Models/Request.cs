@@ -9,7 +9,7 @@ namespace TimeOffManager.Models
         public int RequestId { get; set; }
 
         [Column("request_type")]
-        public int RequestType { get; set; }
+        public string RequestType { get; set; } = null!;
 
         [Column("s_date")]
         public DateOnly StartDate { get; set; }

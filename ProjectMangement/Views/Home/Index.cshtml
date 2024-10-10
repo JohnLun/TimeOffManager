@@ -1,8 +1,75 @@
-﻿@{
+﻿@model TimeOffManager.Models.User
+@{
     ViewData["Title"] = "Home Page";
 }
+<!-- Add the required scripts and stylesheets for DataTables -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css" />
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container">
+    <div class="card mb-4">
+        <div class="card-header text-white bg-teal">
+            <strong>Time Off Balances</strong>
+        </div>
+        <div class="card-body p-0">
+            <table class="table table-bordered mb-0">
+                <tbody>
+                    <tr>
+                        <td>Annual Paid Time Off Available</td>
+                        <td>66.67 Hours</td>
+                    </tr>
+                    <tr>
+                        <td>Community Impact</td>
+                        <td>16.00 Hours</td>
+                    </tr>
+                    <tr>
+                        <td>Floating Holiday</td>
+                        <td>8.00 Hours</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
+<div class="container">
+    <input class="form-control mb-3" id="filterInput" type="text" placeholder="Filter requests...">
+
+    <table class="table table-bordered table-striped request-table">
+        <thead class="thead-light jmfamily-thead">
+            <tr>
+                <th>Request Type</th>
+                <th>Date(s)</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody id="requestTable">
+            @foreach (var request in Model.Requests)
+            {
+                <tr>
+                    <td>@request.RequestType</td>
+                    <td>@request.StartDate.ToString("MM/dd/yyyy") - @request.EndDate.ToString("MM/dd/yyyy")</td>
+                    <td>@request.Status</td>
+                    <td>
+                        <a href="@Url.Action("Report", "Home", new { requestId = request.RequestId })" class="btn btn-primary jmfamily-btn">
+                            View Report
+                        </a>
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<script>
+    document.getElementById('filterInput').addEventListener('keyup', function () {
+        var filter = this.value.toUpperCase();
+        var rows = document.querySelectorAll('#requestTable tr');
+        rows.forEach(function (row) {
+            var cells = row.getElementsByTagName('td');
+            var match = Array.from(cells).some(cell => cell.textContent.toUpperCase().includes(filter));
+            row.style.display = match ? '' : 'none';
+        });
+    });
+</script>
