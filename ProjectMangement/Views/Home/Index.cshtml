@@ -33,7 +33,18 @@
     </div>
 </div>
 <div class="container">
-    <input class="form-control mb-3" id="filterInput" type="text" placeholder="Filter requests...">
+    <div class="row">
+        <div class="col">
+                <a href="@Url.Action("Report", "Home", new { requestId = -1 })" class="btn btn-primary jmfamily-btn">
+                    New Report
+                </a>
+        </div>
+        <div class="col">
+            <input class="form-control mb-3" id="filterInput" type="text" placeholder="Filter requests...">
+        </div>
+       
+    </div>
+    
 
     <table class="table table-bordered table-striped request-table">
         <thead class="thead-light jmfamily-thead">
