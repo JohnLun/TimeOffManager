@@ -21,7 +21,7 @@ namespace TimeOffManager.Models
         public string Reason { get; set; } = null!;
 
         [Column("status")]
-        public string Status { get; set; } = "pending";
+        public string Status { get; set; } = "Pending";
 
 
 
