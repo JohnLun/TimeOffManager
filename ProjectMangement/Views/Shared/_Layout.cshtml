@@ -1,4 +1,8 @@
-﻿
+﻿@{
+    // Retrieve session values
+    var firstName = Context.Session.GetString("Firstname");
+    var lastName = Context.Session.GetString("LastName");
+}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,7 +23,7 @@
 
                 <div class="d-flex ms-3">
                     <span class="navbar-text me-3">
-                        <strong>Welcome @ViewBag.FirstName @ViewBag.LastName</strong>
+                        <strong>Welcome @firstName @lastName</strong>
                     </span>
                 </div>
 

@@ -26,6 +26,9 @@ namespace TimeOffManager.Controllers
             var user = await _db.Users.FirstOrDefaultAsync(usr => usr.Email == Email && usr.Password == Password);
             if (user != null)
             {
+                HttpContext.Session.SetString("Firstname", user.FirstName.ToString());
+                HttpContext.Session.SetString("LastName", user.LastName.ToString());
+                HttpContext.Session.SetInt32("UserId", user.UserId);
                 return RedirectToAction("Index", "Home", new { userId = user.UserId});
             }
             return View("index");

@@ -20,9 +20,9 @@ namespace TimeOffManager.Controllers
 
         public async Task<IActionResult> Index(int UserId)
         {
+            UserId = (int)HttpContext.Session.GetInt32("UserId");
             var user = await _db.Users.Include(u => u.Requests).FirstOrDefaultAsync(u => u.UserId == UserId);
-            ViewBag.FirstName = user.FirstName; // Replace with actual user data
-            ViewBag.LastName = user.LastName;
+           
             int availablePTOHours = 160;  // Assuming you have these properties in the User model
             int availableFHHours = 8;
             int availableCIHours = 16;
