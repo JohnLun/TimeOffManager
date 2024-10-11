@@ -13,7 +13,12 @@ public class Program
         // Add services to the container.
         builder.Services.AddControllersWithViews();
 
-       
+        builder.Services.AddSession(options =>
+        {
+            options.IdleTimeout = TimeSpan.FromMinutes(30); // Set session timeout to 30 minutes
+            options.Cookie.HttpOnly = true; // Ensure the session cookie is accessible only via HTTP
+            options.Cookie.IsEssential = true; // Make the session cookie essential
+        });
 
         // Configure Entity Framework Core with PostgreSQL
         builder.Services.AddDbContext<URDbContext>(options =>
@@ -36,6 +41,7 @@ public class Program
 
         app.UseRouting();
 
+        app.UseSession();
 
         app.UseAuthorization();
 
