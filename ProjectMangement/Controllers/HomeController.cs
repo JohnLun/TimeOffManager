@@ -18,9 +18,9 @@ namespace TimeOffManager.Controllers
             _db = dbContext;
         }
 
-        public async Task<IActionResult> Index(int UserId)
+        public async Task<IActionResult> Index()
         {
-            UserId = (int)HttpContext.Session.GetInt32("UserId");
+            int UserId = (int)HttpContext.Session.GetInt32("UserId");
             var user = await _db.Users.Include(u => u.Requests).FirstOrDefaultAsync(u => u.UserId == UserId);
            
             int availablePTOHours = 160;  // Assuming you have these properties in the User model
@@ -89,8 +89,9 @@ namespace TimeOffManager.Controllers
         }
 
         [Route("home/report/{RequestId}")]
-        public async Task<IActionResult> Report(int RequestId, int UserId)
+        public async Task<IActionResult> Report(int RequestId)
         {
+            int UserId = (int)HttpContext.Session.GetInt32("UserId");
             if (RequestId != 0)
             {
                 var report = await _db.Requests.Include(u => u.User).FirstOrDefaultAsync(r => r.RequestId == RequestId);
@@ -102,21 +103,22 @@ namespace TimeOffManager.Controllers
                 }
             }
 
-            return View(new Request { UserId = UserId});
+            return View(new Request());
         }
 
         [HttpDelete("home/delete")]
-        public async Task<IActionResult> Delete(int RequestId, int UserId)
+        public async Task<IActionResult> Delete(int RequestId)
         {
             var request = await _db.Requests.FirstOrDefaultAsync(r => r.RequestId == RequestId);
             _db.Requests.Remove(request);
             _db.SaveChangesAsync();
-            return RedirectToAction(nameof(Index), new { userId = UserId });
+            return RedirectToAction(nameof(Index));
         }
 
 
         [HttpPost("home/report/{RequestId}")]
-        public async Task<IActionResult> Report(int RequestId, DateOnly StartDate, DateOnly EndDate, string Reason, string RequestType, string Status, int UserId){
+        public async Task<IActionResult> Report(int RequestId, DateOnly StartDate, DateOnly EndDate, string Reason, string RequestType, string Status){
+            int UserId = (int)HttpContext.Session.GetInt32("UserId");
             var user = await _db.Users.Include(u => u.Requests).FirstOrDefaultAsync(u => u.UserId == UserId);
             if (RequestId != 0)
             {
@@ -143,7 +145,7 @@ namespace TimeOffManager.Controllers
                 user.Requests.Add(request);
             }
             await _db.SaveChangesAsync();
-            return RedirectToAction(nameof(Index), new { userId = UserId });
+            return RedirectToAction(nameof(Index));
 
         }
     }
