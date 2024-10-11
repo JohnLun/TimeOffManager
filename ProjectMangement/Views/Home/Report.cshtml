@@ -133,6 +133,15 @@
 </form>
 
 <script>
+    const today = new Date().toISOString().split('T')[0];
+
+    // Set the default value for StartDate and EndDate to today's date
+    document.getElementById('startDate').value = today;
+    document.getElementById('startDate').min = today;
+
+    // Set the minimum date for EndDate to today
+    document.getElementById('endDate').min = today;
+    document.getElementById('endDate').value = today;
     function deleteRequest(requestId) {
         if (confirm("Are you sure you want to delete this request?")) {
             fetch(`/home/delete?RequestId=${requestId}`, {
