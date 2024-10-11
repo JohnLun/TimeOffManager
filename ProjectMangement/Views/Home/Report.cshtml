@@ -1,7 +1,7 @@
 ﻿@model TimeOffManager.Models.Request
 
 <h2>@(Model.RequestId == 0 ? "Create New Request" : "Edit Request")</h2>
-<form asp-action="Report" method="post" onsubmit="return validateDates()">
+<form asp-action="Report" method="post" onsubmit="return validateEntries()">
     <div class="container mt-5">
         <div class="row">
             <!-- Hidden fields for UserId and Status -->
@@ -47,12 +47,41 @@
                 <div class="form-group">
                     <label asp-for="RequestType" class="form-label" style="color: #008c96;">Request Type</label>
                     <div class="input-group">
-                        <select class="form-control custom-input" asp-for="RequestType">
-                            <option value="" disabled selected=@(Model.RequestType == null ? "selected" : "")>Select Type</option>
-                            <option value="PTO" selected=@(Model.RequestType == "PTO" ? "selected" : "") name="PTO">Paid Time Off</option>
-                            <option value="CI" selected=@(Model.RequestType == "CI" ? "selected" : "") name="CI">Community Impact</option>
-                            <option value="FH" selected=@(Model.RequestType == "FH" ? "selected" : "") name="FH">Floating Holiday</option>
+                        <select class="form-control custom-input" asp-for="RequestType" id="requestType">
+                            @if (Model.RequestType == null)
+                            {
+                                <option value="SelectType" selected>Select Type</option>
+                            }
+
+
+                            @if (Model.RequestType == "PTO")
+                            {
+                                <option value="PTO" selected>Paid Time Off</option>
+                            }
+                            else
+                            {
+                                <option value="PTO">Paid Time Off</option>
+                            }
+
+                            @if (Model.RequestType == "CI")
+                            {
+                                <option value="CI" selected>Community Impact</option>
+                            }
+                            else
+                            {
+                                <option value="CI">Community Impact</option>
+                            }
+
+                            @if (Model.RequestType == "FH")
+                            {
+                                <option value="FH" selected>Floating Holiday</option>
+                            }
+                            else
+                            {
+                                <option value="FH">Floating Holiday</option>
+                            }
                         </select>
+
                         <div class="input-group-append">
                             <span class="input-group-text">
                                 <i class="fa fa-caret-down"></i>
@@ -67,7 +96,7 @@
         <div class="row mt-3">
             <div class="col-12">
                 <label asp-for="Reason" class="form-label" style="color: #008c96;">Reason</label>
-                <textarea class="form-control custom-textarea" asp-for="Reason" rows="5" placeholder="Reason" name="Reason"></textarea>
+                <textarea class="form-control custom-textarea" asp-for="Reason" rows="5" id="reason" placeholder="Reason" name="Reason"></textarea>
             </div>
         </div>
 
@@ -119,12 +148,24 @@
                 .catch(error => console.error('Error:', error));
         }
     }
-    function validateDates() {
+    function validateEntries() {
         const startDate = document.getElementById('startDate').value
         const endDate = document.getElementById('endDate').value;
+        const requestType = document.getElementById('requestType').value;
+        const reason = document.getElementById('reason').value;
+
+        if(requestType == "SelectType") {
+            alert('Must select a request type');
+            return false;
+        }
 
         if (new Date(startDate) > new Date(endDate)) {
             alert('End Date must be after Start Date.');
+            return false;
+        }
+
+        if (reason == null || reason == "") {
+            alert('Must enter a reason');
             return false;
         }
         return true;
