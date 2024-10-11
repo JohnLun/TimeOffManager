@@ -1,7 +1,7 @@
 ﻿@model TimeOffManager.Models.Request
 
 <h2>@(Model.RequestId == 0 ? "Create New Request" : "Edit Request")</h2>
-<form asp-action="Report" method="post">
+<form asp-action="Report" method="post" onsubmit="return validateDates()">
     <div class="container mt-5">
         <div class="row">
             <!-- Hidden fields for UserId and Status -->
@@ -17,7 +17,7 @@
                 <div class="form-group">
                     <label asp-for="StartDate" class="form-label" style="color: #008c96;">Start Date</label>
                     <div class="input-group">
-                        <input type="date" class="form-control custom-input" name="StartDate" asp-for="StartDate" />
+                        <input type="date" class="form-control custom-input" name="StartDate" asp-for="StartDate" id="startDate" />
                         <div class="input-group-append">
                             <span class="input-group-text">
                                 <i class="fa fa-calendar"></i>
@@ -32,7 +32,7 @@
                 <div class="form-group">
                     <label asp-for="EndDate" class="form-label" style="color: #008c96;">End Date</label>
                     <div class="input-group">
-                        <input type="date" class="form-control custom-input" name="EndDate" asp-for="EndDate" />
+                        <input type="date" class="form-control custom-input" name="EndDate" asp-for="EndDate" id="endDate" />
                         <div class="input-group-append">
                             <span class="input-group-text">
                                 <i class="fa fa-calendar"></i>
@@ -116,5 +116,15 @@
                 })
                 .catch(error => console.error('Error:', error));
         }
+    }
+    function validateDates() {
+        const startDate = document.getElementById('startDate').value;
+        const endDate = document.getElementById('endDate').value;
+
+        if (new Date(startDate) >= new Date(endDate)) {
+            alert('End Date must be after Start Date.');
+            return false;
+        }
+        return true;
     }
 </script>

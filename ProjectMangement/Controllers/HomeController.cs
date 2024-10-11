@@ -130,7 +130,7 @@ namespace TimeOffManager.Controllers
                 request.User = user;
             }
             else
-            {
+            {          
                 var request = new Request
                 {
                     StartDate = StartDate,
