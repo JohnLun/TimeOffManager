@@ -80,7 +80,7 @@
                 }
                 else
                 {
-                    <button type="submit" class="btn btn-primary" style="background-color: #008c96; border-color: #008c96;">Save Changes</button>
+                    <button type="submit" class="btn btn-primary" style="background-color: #008c96; border-color: #008c96;" @(Model.Status == "approved" ? "disabled" : "")>Save Changes</button>
                 }
 
                 <!-- Cancel Button -->
@@ -89,7 +89,9 @@
                 <!-- Trash Button (only if RequestId != 0) -->
                 @if (Model.RequestId != 0)
                 {
-                    <button type="button" class="btn btn-danger ml-2" onclick="deleteRequest(@Model.RequestId)">
+
+                    <button type="button" class="btn btn-danger ml-2" onclick="deleteRequest(@Model.RequestId)" @(Model.Status == "approved" ? "disabled='disabled'" : "")>
+
                         <i class="fa fa-trash"></i> Delete
                     </button>
                 }
@@ -121,7 +123,7 @@
         const startDate = document.getElementById('startDate').value
         const endDate = document.getElementById('endDate').value;
 
-        if (new Date(startDate) >= new Date(endDate)) {
+        if (new Date(startDate) > new Date(endDate)) {
             alert('End Date must be after Start Date.');
             return false;
         }
