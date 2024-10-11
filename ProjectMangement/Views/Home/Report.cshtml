@@ -80,7 +80,7 @@
                 }
                 else
                 {
-                    <button type="submit" class="btn btn-primary" style="background-color: #008c96; border-color: #008c96;" @(Model.Status == "approved" ? "disabled" : "")>Save Changes</button>
+                    <button type="submit" class="btn btn-primary" style="background-color: #008c96; border-color: #008c96;" @(Model.Status.ToLower() == "approved" ? "disabled" : "")>Save Changes</button>
                 }
 
                 <!-- Cancel Button -->
@@ -90,7 +90,7 @@
                 @if (Model.RequestId != 0)
                 {
 
-                    <button type="button" class="btn btn-danger ml-2" onclick="deleteRequest(@Model.RequestId)" @(Model.Status == "approved" ? "disabled='disabled'" : "")>
+                    <button type="button" class="btn btn-danger ml-2" onclick="deleteRequest(@Model.RequestId)" @(Model.Status.ToLower() == "approved" ? "disabled='disabled'" : "")>
 
                         <i class="fa fa-trash"></i> Delete
                     </button>
