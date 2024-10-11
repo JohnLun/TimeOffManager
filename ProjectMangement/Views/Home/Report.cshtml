@@ -121,7 +121,7 @@
         const startDate = document.getElementById('startDate').value;
         const endDate = document.getElementById('endDate').value;
 
-        if (new Date(startDate) >= new Date(endDate)) {
+        if (new Date(startDate) > new Date(endDate)) {
             alert('End Date must be after Start Date.');
             return false;
         }
