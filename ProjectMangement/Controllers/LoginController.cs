@@ -29,7 +29,7 @@ namespace TimeOffManager.Controllers
                 HttpContext.Session.SetString("Firstname", user.FirstName.ToString());
                 HttpContext.Session.SetString("LastName", user.LastName.ToString());
                 HttpContext.Session.SetInt32("UserId", user.UserId);
-                return RedirectToAction("Index", "Home", new { userId = user.UserId});
+                return RedirectToAction("Index", "Home");
             }
             return View("index");
         }
