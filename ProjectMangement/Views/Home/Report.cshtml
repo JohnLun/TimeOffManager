@@ -1,6 +1,9 @@
 ﻿@model TimeOffManager.Models.Request
 
 <h2>@(Model.RequestId == 0 ? "Create New Request" : "Edit Request")</h2>
+<input type="hidden" id="PTOHours" value="@ViewBag.PTOHours"> <!-- Example available PTO hours -->
+<input type="hidden" id="FHHours" value="@ViewBag.FHHours">   <!-- Example available FH hours -->
+<input type="hidden" id="CIHours" value="@ViewBag.CIHours">
 <form asp-action="Report" method="post" onsubmit="return validateEntries()">
     <div class="container mt-5">
         <div class="row">
@@ -149,25 +152,72 @@
         }
     }
     function validateEntries() {
-        const startDate = document.getElementById('startDate').value
-        const endDate = document.getElementById('endDate').value;
-        const requestType = document.getElementById('requestType').value;
-        const reason = document.getElementById('reason').value;
+       
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+            const requestType = document.getElementById('requestType').value;
+            const reason = document.getElementById('reason').value;
 
-        if(requestType == "SelectType") {
-            alert('Must select a request type');
-            return false;
-        }
+            const availablePTOHours = parseInt(document.getElementById('PTOHours').value);
+            const availableFHHours = parseInt(document.getElementById('FHHours').value);
+            const availableCIHours = parseInt(document.getElementById('CIHours').value);
 
-        if (new Date(startDate) > new Date(endDate)) {
-            alert('End Date must be after Start Date.');
-            return false;
-        }
+            // Calculate requested hours using the helper function
+            const requestedHours = calculateRequestedHours(startDate, endDate);
 
-        if (reason == null || reason == "") {
-            alert('Must enter a reason');
-            return false;
-        }
-        return true;
+            // Validate request type
+            if (requestType === "SelectType") {
+                alert('Must select a request type');
+                return false;
+            }
+
+            // Validate date range
+            if (new Date(startDate) > new Date(endDate)) {
+                alert('End Date must be after Start Date.');
+                return false;
+            }
+
+            // Validate the reason
+            if (reason.trim() === "") {
+                alert('Must enter a reason');
+                return false;
+            }
+
+            // Validate hours based on request type
+            if (requestType === "PTO" && requestedHours > availablePTOHours) {
+                alert('You do not have enough PTO hours.');
+                return false;
+            }
+
+            if (requestType === "FH" && requestedHours > availableFHHours) {
+                alert('You do not have enough Floating Holiday hours.');
+                return false;
+            }
+
+            if (requestType === "CI" && requestedHours > availableCIHours) {
+                alert('You do not have enough Community Impact hours.');
+                return false;
+            }
+
+            return true;
+    
     }
+
+    function calculateRequestedHours(startDate, endDate) {
+        const start = new Date(startDate);
+        const end = new Date(endDate);
+        let totalWorkHours = 0;
+
+        // Iterate through each day between start and end dates
+        for (let date = start; date <= end; date.setDate(date.getDate() + 1)) {
+            const dayOfWeek = date.getDay();
+            // Only count weekdays (Monday to Friday), where 1 = Monday, 5 = Friday
+            if (dayOfWeek !== 0 && dayOfWeek !== 6) {
+                totalWorkHours += 8;  // Add 8 hours for each workday
+            }
+        }
+
+        return totalWorkHours;
+    }
+
 </script>

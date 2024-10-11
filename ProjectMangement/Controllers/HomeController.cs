@@ -91,7 +91,14 @@ namespace TimeOffManager.Controllers
         [Route("home/report/{RequestId}")]
         public async Task<IActionResult> Report(int RequestId)
         {
+            
             int UserId = (int)HttpContext.Session.GetInt32("UserId");
+            var user = await _db.Users.Include(u => u.Requests).FirstOrDefaultAsync(u => u.UserId == UserId);
+
+            ViewBag.PTOHours = user.PTOHours;
+            ViewBag.FHHours = user.FHHours;
+            ViewBag.CIHours = user.CIHours;
+
             if (RequestId != 0)
             {
                 var report = await _db.Requests.Include(u => u.User).FirstOrDefaultAsync(r => r.RequestId == RequestId);
