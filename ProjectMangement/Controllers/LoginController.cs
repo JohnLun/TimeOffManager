@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using TimeOffManager.Models;
 using TimeOffManager.Data;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Infrastructure.Internal;
+using BCrypt.Net; //import hashing dependency
 
 namespace TimeOffManager.Controllers
 {
@@ -43,12 +44,12 @@ namespace TimeOffManager.Controllers
         [HttpPost("create-account")]
         public IActionResult CreateAccount(string FirstName, string LastName, string Email, string Password)
         {
-            
+                var hashedPassword = BCrypt.Net.BCrypt.HashPassword(Password); //hashed password var
                 // Create a new user object
                 var user = new User
                 {
                     Email = Email,
-                    Password = Password, // In a real application, use a hashing function
+                    Password = hashedPassword, // In a real application, use a hashing function
                     FirstName = FirstName,
                     LastName = LastName,
                     // Initialize PTOHours, CIHours, FHHours with default values
