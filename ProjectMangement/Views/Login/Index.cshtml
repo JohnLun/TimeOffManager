@@ -24,6 +24,12 @@
                 <div class="text-center mt-3">
                     <a asp-action="CreateAccount" class="btn btn-link">Create an Account</a>
                 </div>
+                @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+                {
+                    <div class="alert alert-danger mt-3" role="alert">
+                        @ViewBag.ErrorMessage
+                    </div>
+                }
             </div>
         </div>
     </div>
