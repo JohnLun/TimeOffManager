@@ -25,13 +25,15 @@ namespace TimeOffManager.Controllers
         public async Task<IActionResult> Login(string Email, string Password)
         {
             var user = await _db.Users.FirstOrDefaultAsync(usr => usr.Email == Email && usr.Password == Password);
-            if (user != null)
+            if (user != null && BCrypt.Net.BCrypt.Verify(Password, user.Password))
             {
                 HttpContext.Session.SetString("Firstname", user.FirstName.ToString());
                 HttpContext.Session.SetString("LastName", user.LastName.ToString());
                 HttpContext.Session.SetInt32("UserId", user.UserId);
                 return RedirectToAction("Index", "Home");
             }
+            //Error message for failed login
+            ViewBag.ErrorMessage = "Invalid email or password. Please try again.";
             return View("index");
         }
 
