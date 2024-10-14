@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using TimeOffManager.Models;
 using TimeOffManager.Data;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Infrastructure.Internal;
+using BCrypt.Net; //import hashing dependency
 
 namespace TimeOffManager.Controllers
 {
@@ -21,19 +22,43 @@ namespace TimeOffManager.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login(string Email, string Password)
-        {
-            var user = await _db.Users.FirstOrDefaultAsync(usr => usr.Email == Email && usr.Password == Password);
-            if (user != null)
-            {
-                HttpContext.Session.SetString("Firstname", user.FirstName.ToString());
-                HttpContext.Session.SetString("LastName", user.LastName.ToString());
-                HttpContext.Session.SetInt32("UserId", user.UserId);
-                return RedirectToAction("Index", "Home");
-            }
-            return View("index");
-        }
+         public async Task<IActionResult> Login(string Email, string Password)
+             {
+  
 
+             var user = await _db.Users.FirstOrDefaultAsync(usr => usr.Email == Email);
+
+             if (user == null)
+             {
+                 Console.WriteLine("User not found.");
+                 ViewBag.ErrorMessage = "Invalid email or password. Please try again.";
+                 return View("Index");
+             }
+
+
+             bool isPasswordValid = BCrypt.Net.BCrypt.Verify(Password, user.Password);
+             Console.WriteLine($"Password Valid: {isPasswordValid}");
+
+             // Check if the password is correct
+             if (isPasswordValid)
+             {
+             // Successful login: set session variables
+                 HttpContext.Session.SetString("Firstname", user.FirstName);
+                 HttpContext.Session.SetString("LastName", user.LastName);
+                 HttpContext.Session.SetInt32("UserId", user.UserId);
+
+                 // Redirect to the home page
+                 Console.WriteLine("Login successful! Redirecting to home.");
+                 return RedirectToAction("Index", "Home");
+             }
+
+             // If login fails, set an error message
+             Console.WriteLine("Invalid password.");
+             ViewBag.ErrorMessage = "Invalid email or password. Please try again.";
+
+             // Return the login view
+             return View("Index");
+             }
         [HttpGet("create-account")]
         public IActionResult CreateAccount()
         {
@@ -43,12 +68,12 @@ namespace TimeOffManager.Controllers
         [HttpPost("create-account")]
         public IActionResult CreateAccount(string FirstName, string LastName, string Email, string Password)
         {
-            
+                var hashedPassword = BCrypt.Net.BCrypt.HashPassword(Password); //hashed password var
                 // Create a new user object
                 var user = new User
                 {
                     Email = Email,
-                    Password = Password, // In a real application, use a hashing function
+                    Password = hashedPassword, // In a real application, use a hashing function
                     FirstName = FirstName,
                     LastName = LastName,
                     // Initialize PTOHours, CIHours, FHHours with default values
