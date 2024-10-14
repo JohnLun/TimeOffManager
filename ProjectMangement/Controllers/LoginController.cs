@@ -31,7 +31,11 @@ namespace TimeOffManager.Controllers
                 HttpContext.Session.SetInt32("UserId", user.UserId);
                 return RedirectToAction("Index", "Home");
             }
-            return View("index");
+            else
+            {
+                ViewBag.ErrorMessage = "Invalid email/password combination.";
+                return View("Index");
+            }
         }
 
         [HttpGet("create-account")]
